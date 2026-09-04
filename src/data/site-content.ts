@@ -9,14 +9,48 @@
  * Placeholders in [BRACKETS] are intentional. Replace them before launch.
  */
 
+/**
+ * Absolute base URL for canonical tags, Open Graph, and the sitemap.
+ *
+ * `??` only catches undefined, so an environment variable that is DEFINED BUT
+ * EMPTY slipped through and produced `new URL('')`, which throws
+ * ERR_INVALID_URL and fails the production build. Vercel inlines an unset or
+ * blank NEXT_PUBLIC_* var as an empty string, so that case is normal, not
+ * exotic. This trims, validates, and falls back rather than trusting the value.
+ */
+function siteUrl(): string {
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    // Vercel sets this automatically on every deployment, so a forgotten
+    // NEXT_PUBLIC_SITE_URL degrades to the correct deployment URL instead of
+    // breaking the build.
+    process.env.NEXT_PUBLIC_VERCEL_URL && `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`,
+    process.env.VERCEL_URL && `https://${process.env.VERCEL_URL}`,
+  ];
+
+  for (const raw of candidates) {
+    const value = (raw ?? '').trim().replace(/\/+$/, '');
+    if (!value) continue;
+    // Accept a bare host and normalise it, rather than failing on it.
+    const withScheme = /^https?:\/\//i.test(value) ? value : `https://${value}`;
+    try {
+      return new URL(withScheme).origin;
+    } catch {
+      // Fall through to the next candidate.
+    }
+  }
+
+  return 'http://localhost:3000';
+}
+
 export const org = {
   name: 'NextGen Civics',
-  shortName: 'NGC',
+  shortName: 'NGS',
   tagline: "Disagreement doesn't have to mean division.",
   description:
     '[MISSION STATEMENT — one or two sentences describing what the organization does and who it serves.]',
   contactEmail: '[CONTACT EMAIL]',
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000',
+  url: siteUrl(),
   social: {
     // Leave blank to hide the icon.
     x: '',

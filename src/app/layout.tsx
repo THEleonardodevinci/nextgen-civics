@@ -10,7 +10,9 @@ const body = Public_Sans({ subsets: ['latin'], variable: '--font-body', display:
 const mono = IBM_Plex_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-mono', display: 'swap' });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(org.url),
+  // org.url is validated in site-content.ts and always parses, but guard here
+  // too: a throw at this point fails the whole production build.
+  metadataBase: (() => { try { return new URL(org.url); } catch { return new URL('http://localhost:3000'); } })(),
   title: { default: `${org.name} — ${org.tagline}`, template: `%s — ${org.name}` },
   description: org.description,
   openGraph: { type: 'website', siteName: org.name, locale: 'en_US' },
