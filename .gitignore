@@ -1,0 +1,12 @@
+node_modules
+.next
+out
+.env
+.env.local
+.vercel
+*.tsbuildinfo
+
+# District boundary files ARE committed on purpose.
+# Vercel serves them as static assets from public/data, and it does not run
+# npm run map:fetch during a build. If these are ignored, the map ships broken.
+# They are a few MB after simplification, which git handles fine.

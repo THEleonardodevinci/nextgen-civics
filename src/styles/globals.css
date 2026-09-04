@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root { color-scheme: light; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { @apply bg-parchment text-slate font-body antialiased; }
+  h1, h2, h3, h4 { @apply font-display text-ink; text-wrap: balance; }
+
+  /* Visible focus everywhere. Do not remove without a replacement. */
+  :focus-visible {
+    outline: 2px solid #3E6FA3;
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  ::selection { background: #E7EEF6; }
+}
+
+@layer components {
+  .shell { @apply mx-auto w-full max-w-shell px-5 sm:px-8; }
+  .eyebrow { @apply font-mono text-eyebrow uppercase text-slate-light; }
+  .rule { @apply border-t border-parchment-edge; }
+
+  .card { @apply rounded-md border border-parchment-edge bg-white shadow-card transition; }
+  .card-interactive { @apply card hover:-translate-y-[3px] hover:shadow-lift focus-within:-translate-y-[3px]; }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-[3px] px-5 py-3
+           font-body text-sm font-semibold transition disabled:opacity-50 disabled:pointer-events-none;
+  }
+  .btn-primary { @apply btn bg-ink text-parchment hover:bg-ink-soft; }
+  .btn-secondary { @apply btn border border-ink/25 text-ink hover:border-ink hover:bg-white; }
+  .btn-quiet { @apply btn px-3 py-2 text-slate hover:bg-parchment-deep hover:text-ink; }
+  .btn-danger { @apply btn bg-burgundy text-white hover:brightness-110; }
+
+  .field {
+    @apply w-full rounded-[3px] border border-parchment-edge bg-white px-3 py-2.5
+           text-[0.95rem] text-ink placeholder:text-slate-faint focus:border-civic;
+  }
+  .label { @apply mb-1.5 block font-mono text-eyebrow uppercase text-slate; }
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1
+           font-mono text-[0.65rem] uppercase tracking-wider;
+  }
+  .link-underline {
+    @apply text-civic-deep underline decoration-civic/35 underline-offset-[3px] hover:decoration-civic-deep;
+  }
+  .skeleton { @apply animate-pulse rounded bg-parchment-deep; }
+}
+
+/* Long-form article typography. */
+.prose-article { @apply text-[1.0625rem] leading-[1.75] text-slate; }
+.prose-article > * + * { @apply mt-6; }
+.prose-article h2 { @apply mt-12 text-[1.6rem] leading-tight text-ink; }
+.prose-article h3 { @apply mt-10 text-[1.25rem] text-ink; }
+.prose-article strong { @apply font-semibold text-ink; }
+.prose-article a { @apply link-underline; }
+.prose-article ul { @apply list-disc space-y-2 pl-6; }
+.prose-article ol { @apply list-decimal space-y-2 pl-6; }
+.prose-article blockquote {
+  @apply border-l-2 border-gold pl-5 font-display text-[1.25rem] italic leading-snug text-ink;
+}
+.prose-article figcaption { @apply mt-2 font-mono text-xs text-slate-light; }
+.prose-article table { @apply w-full border-collapse text-[0.95rem]; }
+.prose-article th, .prose-article td { @apply border-b border-parchment-edge px-3 py-2 text-left; }
+.prose-article th { @apply font-mono text-eyebrow uppercase text-slate; }
+.prose-article .callout {
+  @apply rounded-md border border-civic/25 bg-civic-wash p-5 text-[0.95rem] text-ink;
+}
+
+/* MapLibre control chrome, restyled to match the site. */
+.maplibregl-ctrl-group {
+  @apply overflow-hidden rounded-[3px] border border-parchment-edge shadow-card;
+}
+.maplibregl-ctrl-group button { background: #fff; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
